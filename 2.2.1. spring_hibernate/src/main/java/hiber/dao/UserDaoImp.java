@@ -15,30 +15,35 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-   @Autowired
-   private SessionFactory sessionFactory;
 
-   @Override
-   public void add(User user) {
-      sessionFactory.getCurrentSession().save(user);
-   }
+    private SessionFactory sessionFactory;
 
-   @Override
-   @SuppressWarnings("unchecked")
-   public List<User> listUsers() {
-      TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
-      return query.getResultList();
-   }
+    @Autowired
+    public UserDaoImp(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-   @Override
-   @Transactional
-   public User getUserByCar(Car car) {
-      final String HQL = "FROM User user JOIN FETCH user.car WHERE user.car.model=:Model AND user.car.series=:Series";
-      return sessionFactory.getCurrentSession()
-              .createQuery(HQL, User.class)
-              .setParameter("Model", car.getModel())
-              .setParameter("Series", car.getSeries())
-              .uniqueResult();
-   }
+    @Override
+    public void add(User user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listUsers() {
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+        return query.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public User getUserByCar(Car car) {
+        final String HQL = "FROM User user JOIN FETCH user.car WHERE user.car.model=:Model AND user.car.series=:Series";
+        return sessionFactory.getCurrentSession()
+                .createQuery(HQL, User.class)
+                .setParameter("Model", car.getModel())
+                .setParameter("Series", car.getSeries())
+                .uniqueResult();
+    }
 
 }
