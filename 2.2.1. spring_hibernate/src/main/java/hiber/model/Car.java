@@ -12,7 +12,9 @@ public class Car {
     @Column
     private int series;
 
-
+    @OneToOne
+    @JoinColumn(name = "id")
+    private User user;
     public Car() {
 
     }
@@ -45,6 +47,7 @@ public class Car {
     public void setSeries(int series) {
         this.series = series;
     }
+
 
     @Override
     public String toString() {
